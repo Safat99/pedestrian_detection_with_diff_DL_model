@@ -1,3 +1,6 @@
+#from the dataset we can rename all the same pics and rename them.
+# this should be the first step to do the project after downloading the pictures and annotations
+
 import glob
 import os
 

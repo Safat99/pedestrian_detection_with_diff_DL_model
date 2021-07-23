@@ -1,3 +1,6 @@
+# this code is useful to draw rectangle if image and annotations are on the same folder!
+# bounding boxes will be drawn according to the annotations
+
 import argparse
 import cv2
 # import imutils
