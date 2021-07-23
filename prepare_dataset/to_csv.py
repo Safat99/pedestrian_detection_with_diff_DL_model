@@ -15,6 +15,7 @@ df = df.append(pd.DataFrame(tmp, columns=[,,,,]), ignore_index = True)
 
 import glob
 import pandas as pd
+import cv2
 
 names = glob.glob('*.txt')
 pics = glob.glob('*.jpg')
@@ -34,21 +35,48 @@ for count,i in enumerate(names):
 
 df = pd.DataFrame(list, columns=['label','label2','left', 'top', 'right', 'bottom'])
 df['image'] = image # image add korlam 
-df['left'].astype(float) 
-df['bottom'].astype(float) 
-df['right'].astype(float) 
-df['top'].astype(float) 
+df['left'] = df['left'].astype(float) 
+df['bottom'] = df['bottom'].astype(float) 
+df['right'] = df['right'].astype(float) 
+df['top'] = df['top'].astype(float) 
 
 # since 'human body' has to be at the same column 
 df['label'] = df['label'].astype(str) + ' ' + df['label2'].astype(str) 
 del df['label2']
+
+#rearranging the order of the columns
+df = df[['image', 'left', 'top', 'right', 'bottom', 'label']]
+
+#dataFrame to CSV
+df.to_csv('all_informations.csv',index=False)
 
 
 ####################### now it's time to normalize the bounding box's values ######################
 
 #equivalent to arduino's map function
 def _map(x, in_min, in_max, out_min, out_max):
-    return float((x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min) 
+    return float((x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min)
+
+
+#in the pandas documentation they suggest to use iloc instead of direct dictionary access
+'''
+for i in range(df.shape[0]):
+    img = cv2.imread(str(df['image'][i]) + '.jpg', 0)
+    h,w = img.shape
+    df['left'][i] = df['left'][i] / w
+    df['right'][i] = df ['right'][i] / w
+    df['top'][i] = df ['top'][i] / h
+    df['bottom'][i] = df ['bottom'][i] / h 
+'''
+for i in range(df.shape[0]):
+    img = cv2.imread(str(df['image'][i]) + '.jpg', 0)
+    h,w = img.shape
+    df.iloc[i,1] = df.iloc[i,1] / w
+    df.iloc[i,2] = df.iloc[i,2] / h
+    df.iloc[i,3] = df.iloc[i,3] / w
+    df.iloc[i,4] = df.iloc[i,4] / h
+     
+df.to_csv('all_informations_normalized.csv', index=False)
 
 
 
@@ -60,8 +88,3 @@ def _map(x, in_min, in_max, out_min, out_max):
 
 
 
-
-
-
-
-df = pd.DataFrame(columns=['IMAGE', 'SX', 'SY', 'EX', 'EY', 'CLASS'])
