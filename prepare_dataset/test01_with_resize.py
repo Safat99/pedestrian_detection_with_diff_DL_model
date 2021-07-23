@@ -1,3 +1,7 @@
+#this code is the updated version of test01
+#In this portoin the images will be resized 
+#The bounding boxes will be adjusted with the change of the picture
+
 import argparse
 import cv2
 # import imutils
@@ -25,10 +29,10 @@ def _map(x, in_min, in_max, out_min, out_max):
     return float((x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min) 
 
 for i in range(df.shape[0]):
-    df.left[i] = _map(df.left[i], 0, w, 0, 224)
-    df.right[i] = _map(df.right[i], 0, w, 0, 224)
-    df.top[i] = _map(df.top[i], 0, h, 0, 224)
-    df.bottom[i] = _map(df.bottom[i], 0, h, 0, 224)
+    df.iloc[i,1] = _map(df.iloc[i,1], 0, w, 0, 224)
+    df.iloc[i,3] = _map(df.iloc[i,3], 0, w, 0, 224)
+    df.iloc[i,2] = _map(df.iloc[i,2], 0, h, 0, 224)
+    df.iloc[i,4] = _map(df.iloc[i,4], 0, h, 0, 224)
 
 
 for i in range(df.shape[0]):
