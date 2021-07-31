@@ -10,14 +10,16 @@ data = np.random.randint(100,size=(4,4))
 file = h5py.File('demohdf5_file.hdf5','w')
 
 #for creating the dataset ... this will save as a dictionary
-dset1 = file.create_dataset('dataset1',data=data)
+dset1 = file.create_dataset('dataset1',data=data, maxshape=(None,))
 #there could be more list I can store in the same file with different name/dictionary
 file.close()
+print('file created')
 
 #hdf5 file read
-readobj = h5py.File('demohdf5.hdf5','r')
-#pri
+readobj = h5py.File('demohdf5_file.hdf5','r')
+
 print(list(readobj.keys()))
 print()
 dset1 = readobj['dataset1']
 dset1 = dset1[:] # now it has become to the original state
+print(dset1.shape)
